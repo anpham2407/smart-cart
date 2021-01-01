@@ -4,6 +4,18 @@ export const getById = (id) => {
   return User.findById(id);
 };
 
+export const getByUID = async (uid) => {
+  const user = await User.findOne({
+    uid,
+  });
+
+  if (user) {
+    return user.toObject();
+  }
+
+  return null;
+};
+
 export const getByUsername = async (username) => {
   const user = await User.findOne({
     username,
@@ -12,6 +24,7 @@ export const getByUsername = async (username) => {
   if (user) {
     return user.toObject();
   }
+
   return null;
 };
 

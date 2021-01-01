@@ -9,7 +9,6 @@ router.get('/', async (req, res, next) => {
     const users = await UserService.getUsers();
     res.json(users);
   } catch (error) {
-    console.error('error', error);
     next(error);
   }
 });
@@ -22,7 +21,18 @@ router.get('/:username', async (req, res, next) => {
     const user = await UserService.getByUsername(username);
     res.json(user);
   } catch (error) {
-    console.error('error', error);
+    next(error);
+  }
+});
+
+/* GET user by username */
+router.get('/:username', async (req, res, next) => {
+  try {
+    const { username } = req.params;
+
+    const user = await UserService.getByUsername(username);
+    res.json(user);
+  } catch (error) {
     next(error);
   }
 });
@@ -34,7 +44,6 @@ router.post('/', async (req, res, next) => {
     const user = await UserService.create(payload);
     res.json(user);
   } catch (error) {
-    console.error('error', error);
     next(error);
   }
 });
