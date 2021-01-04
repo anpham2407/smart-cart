@@ -6,23 +6,24 @@ import * as UserService from '../services/user';
 /* GET users listing. */
 router.get('/', async (req, res, next) => {
   try {
-    const users = await UserService.getUsers();
+    const users = await UserService.getAll();
     res.json(users);
   } catch (error) {
-    console.error('error', error);
     next(error);
   }
 });
 
-/* GET user by username */
-router.get('/:username', async (req, res, next) => {
+/* GET user by UID */
+router.get('/:identifier', async (req, res, next) => {
   try {
-    const { username } = req.params;
+    const { identifier } = req.params;
 
-    const user = await UserService.getByUsername(username);
+    // UID = unique ID - generated when we write a new Card for customer
+    // from this UID, we can find coresponding profile
+    // then redirect them to /username link
+    const user = await UserService.getUser(identifier);
     res.json(user);
   } catch (error) {
-    console.error('error', error);
     next(error);
   }
 });
@@ -34,7 +35,6 @@ router.post('/', async (req, res, next) => {
     const user = await UserService.create(payload);
     res.json(user);
   } catch (error) {
-    console.error('error', error);
     next(error);
   }
 });
