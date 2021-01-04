@@ -6,31 +6,45 @@ const userSchema = new Schema(
     uid: {
       type: String,
       unique: true,
+      required: true,
     },
     username: {
-      type: 'String',
+      type: String,
       unique: true,
+      trim: true,
+      default: null,
     },
     avatar: String,
     fullName: {
-      type: 'String',
+      type: String,
+      trim: true,
     },
     firstName: {
       type: String,
+      trim: true,
     },
-    lastName: String,
+    lastName: {
+      type: String,
+      trim: true,
+    },
     nickname: {
-      type: 'String',
+      type: String,
+      trim: true,
     },
-    description: String,
+    description: {
+      type: String,
+      trim: true,
+    },
     email: {
-      type: 'String',
+      type: String,
+      default: null,
+      trim: true,
     },
     phone: {
-      type: 'String',
+      type: String,
     },
     password: {
-      type: 'String',
+      type: String,
     },
     activatedAt: {
       type: Date,

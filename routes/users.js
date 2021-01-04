@@ -14,14 +14,14 @@ router.get('/', async (req, res, next) => {
 });
 
 /* GET user by UID */
-router.get('/:uid', async (req, res, next) => {
+router.get('/:identifier', async (req, res, next) => {
   try {
-    const { uid } = req.params;
+    const { identifier } = req.params;
 
     // UID = unique ID - generated when we write a new Card for customer
     // from this UID, we can find coresponding profile
     // then redirect them to /username link
-    const user = await UserService.getByUID(uid);
+    const user = await UserService.getUser(identifier);
     res.json(user);
   } catch (error) {
     next(error);
