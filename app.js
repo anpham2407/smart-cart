@@ -6,9 +6,16 @@ import cors from 'cors';
 
 import mongoose from 'mongoose';
 
+import indexRouter from './routes/index';
+import usersRouter from './routes/users';
+import authRouter from './routes/auth';
+
 // db connection
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
 mongoose
-  .connect('mongodb://admin:admin@localhost:27017/getme?authSource=admin', {
+  .connect(process.env.DB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -20,14 +27,6 @@ mongoose
     throw err;
   });
 
-mongoose.set('useNewUrlParser', true);
-mongoose.set('useFindAndModify', false);
-mongoose.set('useCreateIndex', true);
-
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
-const authRouter = require('./routes/auth');
-
 const app = express();
 
 app.use(cors());
@@ -35,11 +34,11 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/api/auth', authRouter);
-app.use('/api/users', usersRouter);
+app.use('/v1/auth', authRouter);
+app.use('/v1/users', usersRouter);
 
 // error handler
 app.use(function (err, req, res, next) {
