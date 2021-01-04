@@ -1,6 +1,5 @@
 import express from 'express';
 import { APIError } from '../core/error';
-import * as UserService from '../services/user';
 import * as AuthService from '../services/auth';
 
 const router = express.Router();
@@ -12,6 +11,13 @@ const ErrInvalidAuthRequest = APIError({
   message: 'invalid auth request, missing email/phone/password',
 });
 
+const ErrActivateAccountRequest = APIError({
+  status: 400,
+  code: 'INVALID_ACTIVATE_ACCOUNT_REQUEST',
+  message:
+    'invalid activate account request, missing uid/username/email/password',
+});
+
 router.post('/login', async (req, res, next) => {
   try {
     // validate login request payload
@@ -21,8 +27,8 @@ router.post('/login', async (req, res, next) => {
     }
 
     const authReq = {
-      id: String(id).trim(),
-      password: String(password).trim(),
+      id,
+      password,
     };
 
     const authResp = await AuthService.userLogin(authReq);
@@ -38,11 +44,26 @@ router.post('/refresh');
 // /* POST new user */
 router.post('/activate', async (req, res, next) => {
   try {
-    const payload = req.body;
-    const user = await UserService.create(payload);
-    res.json(user);
+    const { uid, username, email, password, firstName, lastName } = req.body;
+
+    if (!(uid && username && email && password)) {
+      return next(ErrActivateAccountRequest);
+    }
+
+    const activateAccountReq = {
+      uid,
+      username,
+      email,
+      password,
+      firstName,
+      lastName,
+    };
+
+    const activatedUser = await AuthService.userActivateAccount(
+      activateAccountReq,
+    );
+    res.json(activatedUser);
   } catch (error) {
-    console.error('error', error);
     next(error);
   }
 });

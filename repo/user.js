@@ -59,3 +59,16 @@ export const getAll = () => {
 export const create = (m) => {
   return User.create(m);
 };
+
+export const updateByUID = (uid, updates) => {
+  return User.findOneAndUpdate(
+    {
+      uid,
+    },
+    {
+      $set: {
+        ...updates,
+      },
+    },
+  );
+};

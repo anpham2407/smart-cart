@@ -27,3 +27,21 @@ export const ErrInvalidAuthCredentials = APIError({
   status: 401,
   message: 'invalid auth credentials',
 });
+
+export const ErrEmailHasBeenUsed = APIError({
+  code: 'EMAIL_HAS_BEEN_USED',
+  status: 409,
+  message: 'this email has been used with another account',
+});
+
+export const ErrUsernameHasBeenUsed = APIError({
+  code: 'USERNAME_HAS_BEEN_USED',
+  status: 409,
+  message: 'this username has been used with another account',
+});
+
+export const ErrUserAlreadyActivated = APIError({
+  code: 'USER_ALREADY_ACTIVATED',
+  status: 409,
+  message: 'this user account has already activated',
+});
