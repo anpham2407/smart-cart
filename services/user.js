@@ -1,18 +1,5 @@
 import * as UserRepo from '../repo/user';
-import { APIError } from '../core/error';
-
-// errors
-const ErrUserNotActivated = APIError({
-  code: 'USER_NOT_ACTIVATED',
-  status: 401,
-  message: 'user/profile has not been activated',
-});
-
-const ErrUserNotExist = APIError({
-  code: 'USER_NOT_FOUND',
-  status: 404,
-  message: 'user/profile uid not found in this system',
-});
+import { ErrUserNotActivated, ErrUserNotExist } from '../core/error';
 
 export const getAll = () => {
   return UserRepo.getAll();
@@ -36,7 +23,7 @@ export const getByUsername = async (username) => {
 };
 
 export const getByUID = async (uid) => {
-  const user = await UserRepo.getByUsername(username);
+  const user = await UserRepo.getByUsername(uid);
   if (!user) {
     throw ErrUserNotExist;
   }

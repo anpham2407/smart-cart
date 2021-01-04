@@ -28,6 +28,30 @@ export const getByUsername = async (username) => {
   return null;
 };
 
+export const getByEmail = async (email) => {
+  const user = await User.findOne({
+    email,
+  });
+
+  if (user) {
+    return user.toObject();
+  }
+
+  return null;
+};
+
+export const getByPhone = async (phone) => {
+  const user = await User.findOne({
+    phone,
+  });
+
+  if (user) {
+    return user.toObject();
+  }
+
+  return null;
+};
+
 export const getAll = () => {
   return User.find();
 };
