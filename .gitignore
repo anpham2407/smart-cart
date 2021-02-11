@@ -1,8 +1,11 @@
 node_modules/
-
+.cache/
 .env*
 
 .vscode/
 .idea/
 
 tmp/
+
+dist/
+public/
