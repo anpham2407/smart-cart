@@ -110,7 +110,7 @@ router.post('/reset-password', async (req, res, next) => {
       if (
           user.resetToken == verifyToken && moment().isBefore(user.expiredResetPassword)
       ) {
-          user.password = hashPassword(newPassword);
+          user.password = await hashPassword(newPassword);
           user.expiredResetPassword = moment();
           await UserService.updateByUID(uid, user);
       }
