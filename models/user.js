@@ -53,6 +53,12 @@ const userSchema = new Schema(
     links: {
       type: ['Mixed'],
     },
+    expiredResetPassword: {
+      type: Date
+    },
+    resetToken: {
+          type: String
+    },
   },
   {
     timestamps: true,

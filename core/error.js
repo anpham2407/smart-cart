@@ -22,6 +22,12 @@ export const ErrUserNotExist = APIError({
   message: 'user/profile uid not found in this system',
 });
 
+export const ErrEmailNotExist = APIError({
+  code: 'EMAIL_NOT_FOUND',
+  status: 404,
+  message: 'email not found in this system',
+});
+
 export const ErrInvalidAuthCredentials = APIError({
   code: 'INVALID_AUTH_CREDENTIALS',
   status: 401,
