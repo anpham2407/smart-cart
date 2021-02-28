@@ -104,18 +104,22 @@ router.post('/forgot-password', async (req, res, next) => {
 
 router.post('/reset-password', async (req, res, next) => {
     const  { verifyToken, uid, newPassword } = req.body;
-    const user = await UserService.getByUID(uid);
-    console.log(user)
-    if (!user) return next(ErrInvalidResetPasswordRequest);
-    if (
-        user.resetToken == verifyToken && moment().isBefore(user.expiredResetPassword)
-    ) {
-        user.password = hashPassword(newPassword);
-        user.expiredResetPassword = moment();
-        await UserService.updateByUID(uid, user);
+    try {
+      const user = await UserService.getByUID(uid);
+      if (!user) throw ErrInvalidResetPasswordRequest;
+      if (
+          user.resetToken == verifyToken && moment().isBefore(user.expiredResetPassword)
+      ) {
+          user.password = hashPassword(newPassword);
+          user.expiredResetPassword = moment();
+          await UserService.updateByUID(uid, user);
+      }
+      else throw ErrInvalidResetPasswordRequest;
+      res.json({success: true});
+  
+    } catch (error) {
+      next(error);
     }
-    else return next( ErrInvalidResetPasswordRequest);
-    res.json({success: true});
-})
+  })
 
 module.exports = router;
