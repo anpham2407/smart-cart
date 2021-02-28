@@ -111,7 +111,7 @@ router.post('/reset-password', async (req, res, next) => {
     ) {
         user.password = hashPassword(newPassword);
         user.expiredResetPassword = moment();
-        await UserService.update(uid, user);
+        await UserService.updateByUID(uid, user);
     }
     else throw ErrInvalidResetPasswordRequest;
     res.json({success: true});
