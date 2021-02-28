@@ -106,6 +106,7 @@ router.post('/reset-password', async (req, res, next) => {
     const  { verifyToken, uid, newPassword } = req.body;
     try {
       const user = await UserService.getByUID(uid);
+      console.log("user", user)
       if (!user) throw ErrInvalidResetPasswordRequest;
       if (
           user.resetToken == verifyToken && moment().isBefore(user.expiredResetPassword)
