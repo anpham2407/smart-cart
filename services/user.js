@@ -65,3 +65,7 @@ export const getUser = async (identifier) => {
 export const create = (user) => {
   return UserRepo.create(user);
 };
+
+export const update = (user) => {
+  return UserRepo.update(user);
+}

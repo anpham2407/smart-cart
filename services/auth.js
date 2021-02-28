@@ -1,3 +1,5 @@
+import moment from "moment";
+import { nanoid }  from "nanoid";
 import * as UserRepo from '../repo/user';
 import {
   ErrUserNotExist,
@@ -5,12 +7,14 @@ import {
   ErrEmailHasBeenUsed,
   ErrUserAlreadyActivated,
   ErrUsernameHasBeenUsed,
+  ErrEmailNotExist,
 } from '../core/error';
 import {
   generateAccessToken,
   hashAndCompare,
   hashPassword,
 } from '../utils/token';
+import JobQueue from '../job';
 
 // userLogin tries fuzzy login with id can be username/email/phone
 export const userLogin = async ({ id, password }) => {
@@ -105,3 +109,19 @@ export const userActivateAccount = async ({
   delete updatedUser.password;
   return updatedUser;
 };
+
+
+export const forgotPassword = async ({ email }) => {
+  
+  const user = await UserRepo.getByEmail(email);
+  if (!user) throw ErrEmailNotExist;
+
+  let resetToken = nanoid(48);
+  user.resetToken = resetToken;
+  user.expiredResetPassword = moment().add(5, 'minutes');
+  await Promise.all([
+      UserRepo.updateByUID(user.uid, user),
+      JobQueue.createForgotPasswordMail(user),
+  ]);
+  
+}

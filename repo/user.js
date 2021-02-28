@@ -57,6 +57,7 @@ export const getAll = () => {
 };
 
 export const create = (m) => {
+  console.log(m)
   return User.create(m);
 };
 
