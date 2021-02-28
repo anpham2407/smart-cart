@@ -66,6 +66,6 @@ export const create = (user) => {
   return UserRepo.create(user);
 };
 
-export const update = (user) => {
-  return UserRepo.update(user);
+export const updateByUID = (uid,user) => {
+  return UserRepo.updateByUID(uid,user);
 }
