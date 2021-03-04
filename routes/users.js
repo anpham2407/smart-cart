@@ -1,10 +1,10 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
 
-import * as UserService from '../services/user';
+import * as UserService from "../services/user";
 
 /* GET users listing. */
-router.get('/', async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
     const users = await UserService.getAll();
     res.json(users);
@@ -14,7 +14,7 @@ router.get('/', async (req, res, next) => {
 });
 
 /* GET user by UID */
-router.get('/:identifier', async (req, res, next) => {
+router.get("/:identifier", async (req, res, next) => {
   try {
     const { identifier } = req.params;
 
@@ -29,10 +29,20 @@ router.get('/:identifier', async (req, res, next) => {
 });
 
 /* POST new user */
-router.post('/', async (req, res, next) => {
+router.post("/", async (req, res, next) => {
   try {
     const payload = req.body;
     const user = await UserService.create(payload);
+    res.json(user);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.put("/:uid/block", async (req, res, next) => {
+  const { uid } = req.params;
+  try {
+    const user = await UserService.updateByUID(uid, { isBlock: true });
     res.json(user);
   } catch (error) {
     next(error);
