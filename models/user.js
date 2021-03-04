@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const userSchema = new Schema(
@@ -51,18 +51,29 @@ const userSchema = new Schema(
       default: null,
     },
     links: {
-      type: ['Mixed'],
+      type: ["Mixed"],
     },
     expiredResetPassword: {
-      type: Date
+      type: Date,
     },
     resetToken: {
-          type: String
+      type: String,
+    },
+    role: {
+      type: String,
+      required: true,
     },
   },
   {
     timestamps: true,
   },
+  {
+    isBlock: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+  }
 );
 
-export default mongoose.model('User', userSchema);
+export default mongoose.model("User", userSchema);
