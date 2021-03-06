@@ -1,4 +1,4 @@
-import User from '../models/user';
+import User from "../models/user";
 
 export const getById = (id) => {
   return User.findById(id);
@@ -57,7 +57,7 @@ export const getAll = () => {
 };
 
 export const create = (m) => {
-  console.log(m)
+  console.log(m);
   return User.create(m);
 };
 
@@ -66,10 +66,6 @@ export const updateByUID = (uid, updates) => {
     {
       uid,
     },
-    {
-      $set: {
-        ...updates,
-      },
-    },
+    updates
   );
 };
