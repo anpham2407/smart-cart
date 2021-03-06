@@ -61,7 +61,7 @@ export const create = (m) => {
   return User.create(m);
 };
 
-export const updateByUID = (uid, updates) => {
+export const updateByUID = async (uid, updates) => {
   return User.findOneAndUpdate(
     {
       uid,
