@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
+import { UserRole } from "../core/enum";
 
 const userSchema = new Schema(
   {
@@ -62,6 +63,7 @@ const userSchema = new Schema(
     role: {
       type: String,
       required: true,
+      default: UserRole.USER,
     },
   },
   {
