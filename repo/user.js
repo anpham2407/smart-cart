@@ -20,7 +20,10 @@ export const getByUsername = async (username) => {
   const user = await User.findOne({
     username,
   });
-  return user;
+  if (user) {
+    return user.toObject();
+  }
+  return null;
 };
 
 export const getByEmail = async (email) => {
