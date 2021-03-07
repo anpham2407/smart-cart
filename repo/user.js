@@ -1,6 +1,6 @@
 import User from "../models/user";
 
-export const getById = (id) => {
+export const getById = async (id) => {
   return User.findById(id);
 };
 
@@ -52,17 +52,16 @@ export const getByPhone = async (phone) => {
   return null;
 };
 
-export const getAll = () => {
+export const getAll = async () => {
   return User.find();
 };
 
-export const create = (m) => {
+export const create = async (m) => {
   console.log(m);
   return User.create(m);
 };
 
 export const updateByUID = async (uid, updates) => {
-  console.log(updates);
   return User.findOneAndUpdate(
     {
       uid,
