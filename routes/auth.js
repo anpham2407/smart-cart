@@ -90,7 +90,6 @@ router.post("/forgot-password", async (req, res, next) => {
     if (!email) {
       return next(ErrInvalidForgotPasswordRequest);
     }
-    console.log(email);
     await AuthService.forgotPassword({ email });
     res.json({ success: true });
   } catch (error) {
