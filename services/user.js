@@ -1,11 +1,11 @@
 import * as UserRepo from "../repo/user";
 import { ErrUserNotActivated, ErrUserNotExist } from "../core/error";
 
-export const getAll = () => {
+export const getAll = async () => {
   return UserRepo.getAll();
 };
 
-export const getById = (id) => {
+export const getById = async (id) => {
   return UserRepo.getById(id);
 };
 
@@ -62,7 +62,7 @@ export const getUser = async (identifier) => {
   return user;
 };
 
-export const create = (user) => {
+export const create = async (user) => {
   return UserRepo.create(user);
 };
 
