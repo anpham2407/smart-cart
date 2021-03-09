@@ -69,3 +69,12 @@ export const create = async (user) => {
 export const updateByUID = async (uid, user) => {
   return UserRepo.updateByUID(uid, user);
 };
+
+export const updateUserProfile = async (id, user) => {
+  await UserRepo.updateById(id, user);
+
+  const updatedUser = await UserRepo.getById(id);
+  const resp = updatedUser.toObject();
+  delete resp.password;
+  return resp;
+};

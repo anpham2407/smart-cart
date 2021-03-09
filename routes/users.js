@@ -1,6 +1,8 @@
 var express = require("express");
 var router = express.Router();
+import vCard from "vcards-js";
 
+import { ErrUserNotExist } from "../core/error";
 import * as UserService from "../services/user";
 
 /* GET users listing. */
@@ -44,6 +46,32 @@ router.put("/:uid/block", async (req, res, next) => {
   try {
     const user = await UserService.updateByUID(uid, { isBlock: true });
     res.json(user);
+  } catch (error) {
+    next(error);
+  }
+});
+
+/* PUT update user profile */
+router.get("/:id/vcard", async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const user = await UserService.getById(id);
+    if (!user) {
+      throw ErrUserNotExist;
+    }
+
+    const vcard = new vCard();
+    vcard.firstName = user.fullName;
+    vcard.workPhone = user.phone;
+
+    // const filename = `${String(user.fullName).replace(' ', '')}.vcf`;
+    const filename = `vcard.touchshare.vcf`;
+
+    //set content-type and disposition including desired filename
+    res.set("Content-Type", `text/vcard; name="${filename}"`);
+    res.set("Content-Disposition", `inline; filename="${filename}"`);
+
+    res.send(vcard.getFormattedString());
   } catch (error) {
     next(error);
   }
