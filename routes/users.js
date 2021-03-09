@@ -52,6 +52,27 @@ router.put("/:uid/block", async (req, res, next) => {
 });
 
 /* PUT update user profile */
+router.put("/:id", async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const currentUser = await UserService.getById(id);
+    if (!currentUser) {
+      throw ErrUserNotExist;
+    }
+
+    // payload need validation
+    const updateUserPayload = req.body;
+    const updatedUser = await UserService.updateUserProfile(
+      id,
+      updateUserPayload
+    );
+    res.json(updatedUser);
+  } catch (error) {
+    next(error);
+  }
+});
+
+/* PUT update user profile */
 router.get("/:id/vcard", async (req, res, next) => {
   try {
     const id = req.params.id;
