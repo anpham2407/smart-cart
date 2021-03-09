@@ -37,7 +37,6 @@ mongoose
 
 const app = express();
 app.use("/v1/static", express.static(process.env.STORAGE_PATH));
-app.use("/v1/files", filesRouter);
 app.use(cors());
 app.use(logger("dev"));
 app.use(express.json());
@@ -50,6 +49,7 @@ app.use(limiter);
 app.use("/", indexRouter);
 app.use("/v1/auth", authRouter);
 app.use("/v1/users", usersRouter);
+app.use("/v1/files", filesRouter);
 
 JobQueue.startProcess();
 
