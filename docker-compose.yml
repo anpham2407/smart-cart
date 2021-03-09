@@ -1,13 +1,23 @@
 version: '3.4'
 
 services:
+  api:
+    image: api
+    depends_on:
+      - mongo
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: staging
+    ports:
+      - 6000:5000
+
   mongo:
     image: mongo:4.4.2
     restart: always
     ports:
       - 27017:27017
-  redis:
-    hostname: redis
-    image: redis:alpine
-    ports:
-      - 6379:6379
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
