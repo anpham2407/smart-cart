@@ -2,6 +2,9 @@ FROM node:12
 
 WORKDIR /usr/src/app
 
+# this file was intended to be run with volumes mounted -v getme-data:/data
+RUN mkdir -p /data/avatars
+
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # where available (npm@5+)

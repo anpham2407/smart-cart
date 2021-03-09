@@ -1,11 +1,11 @@
-import * as UserRepo from "../repo/user";
-import { ErrUserNotActivated, ErrUserNotExist } from "../core/error";
+import * as UserRepo from '../repo/user';
+import { ErrUserNotActivated, ErrUserNotExist } from '../core/error';
 
-export const getAll = async () => {
+export const getAll = () => {
   return UserRepo.getAll();
 };
 
-export const getById = async (id) => {
+export const getById = (id) => {
   return UserRepo.getById(id);
 };
 
@@ -62,10 +62,15 @@ export const getUser = async (identifier) => {
   return user;
 };
 
-export const create = async (user) => {
+export const create = (user) => {
   return UserRepo.create(user);
 };
 
-export const updateByUID = async (uid, user) => {
-  return UserRepo.updateByUID(uid, user);
+export const updateUserProfile = async (id, user) => {
+  await UserRepo.updateById(id, user);
+
+  const updatedUser = await UserRepo.getById(id);
+  const resp = updatedUser.toObject();
+  delete resp.password;
+  return resp;
 };

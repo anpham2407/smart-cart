@@ -1,11 +1,12 @@
 const INTERNAL_SERVER_ERROR = 'INTERNAL';
 
-export const APIError = ({ code, status, message, details }) => {
+export const APIError = ({ code, status, message, details, fields }) => {
   return {
     status: status || 500,
     code: code || INTERNAL_SERVER_ERROR,
     message: message,
     details: details,
+    fields: fields || [],
   };
 };
 
@@ -20,12 +21,6 @@ export const ErrUserNotExist = APIError({
   code: 'USER_NOT_FOUND',
   status: 404,
   message: 'user/profile uid not found in this system',
-});
-
-export const ErrEmailNotExist = APIError({
-  code: 'EMAIL_NOT_FOUND',
-  status: 404,
-  message: 'email not found in this system',
 });
 
 export const ErrInvalidAuthCredentials = APIError({
