@@ -1,35 +1,38 @@
-#!/usr/bin/env node
+// load env config
+import 'dotenv/config';
+
+import db from './db';
+db.init(process.env.DB_URI);
 
 /**
  * Module dependencies.
  */
-
-require('dotenv').config();
-
-var app = require('../app');
-var debug = require('debug')('api:server');
-var http = require('http');
+import app from '../app';
+import http from 'http';
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '5000');
+const port = normalizePort(process.env.PORT || '5000');
 app.set('port', port);
 
 /**
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+const server = http.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+
+process.once('dbConnected', () => {
+  server.listen(port);
+});
 
 /**
  * Normalize a port into a number, string, or false.

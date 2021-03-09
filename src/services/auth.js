@@ -1,24 +1,21 @@
-import moment from "moment";
-import { nanoid } from "nanoid";
-import * as UserRepo from "../repo/user";
+import * as UserRepo from '../repo/user';
 import {
   ErrUserNotExist,
   ErrInvalidAuthCredentials,
   ErrEmailHasBeenUsed,
   ErrUserAlreadyActivated,
   ErrUsernameHasBeenUsed,
-  ErrEmailNotExist,
-} from "../core/error";
+} from '../core/error';
 import {
   generateAccessToken,
   hashAndCompare,
   hashPassword,
-} from "../utils/token";
-import JobQueue from "../job";
+} from '../utils/token';
 
 // userLogin tries fuzzy login with id can be username/email/phone
 export const userLogin = async ({ id, password }) => {
   let user;
+
   // try find user with email
   user = await UserRepo.getByEmail(id);
 
@@ -31,6 +28,7 @@ export const userLogin = async ({ id, password }) => {
     // try with username ??
     user = await UserRepo.getByUsername(id);
   }
+
   if (!user) {
     throw ErrUserNotExist;
   }
@@ -40,6 +38,7 @@ export const userLogin = async ({ id, password }) => {
   if (!matched) {
     throw ErrInvalidAuthCredentials;
   }
+
   // generate access token
   // now we don't use refresh token
   const token = await generateAccessToken({
@@ -49,11 +48,12 @@ export const userLogin = async ({ id, password }) => {
     phone: user.phone,
     username: user.username,
   });
+
+  delete user.password;
   const authResponse = {
-    ...user,
+    user,
     accessToken: token,
   };
-  delete authResponse.password;
   return authResponse;
 };
 
@@ -64,27 +64,42 @@ export const userActivateAccount = async ({
   password,
   firstName,
   lastName,
+  fullName,
 }) => {
   let user;
   // find user with this uid, email
   user = await UserRepo.getByUID(uid);
   if (!user) {
+    const err = ErrUserNotExist;
+    err.fields.push({
+      name: 'uid',
+      error: 'user with this UID does not exist',
+    });
     throw ErrUserNotExist;
   }
 
   if (user.activatedAt) {
+    const err = ErrUserAlreadyActivated;
+    err.fields.push({ name: 'uid', error: 'user has already activated' });
     throw ErrUserAlreadyActivated;
   }
 
   // check email existed
   const userByEmail = await UserRepo.getByEmail(email);
   if (userByEmail) {
+    const err = ErrEmailHasBeenUsed;
+    err.fields.push({ name: 'email', error: 'email has already been used' });
     throw ErrEmailHasBeenUsed;
   }
 
   // check username existed
   const userByUsername = await UserRepo.getByUsername(username);
   if (userByUsername) {
+    const err = ErrUsernameHasBeenUsed;
+    err.fields.push({
+      name: 'username',
+      error: 'username has already been used',
+    });
     throw ErrUsernameHasBeenUsed;
   }
 
@@ -99,22 +114,24 @@ export const userActivateAccount = async ({
     activatedAt: new Date(),
     firstName,
     lastName,
+    fullName,
   });
 
   const updatedUser = await UserRepo.getByUID(uid);
   delete updatedUser.password;
-  return updatedUser;
-};
 
-export const forgotPassword = async ({ email }) => {
-  const user = await UserRepo.getByEmail(email);
-  if (!user) throw ErrEmailNotExist;
+  // generate access token
+  // now we don't use refresh token
+  const token = await generateAccessToken({
+    id: user._id,
+    uid: user.uid,
+    email: user.email,
+    phone: user.phone,
+    username: user.username,
+  });
 
-  let resetToken = nanoid(48);
-  user.resetToken = resetToken;
-  user.expiredResetPassword = moment().add(5, "minutes");
-  await Promise.all([
-    UserRepo.updateByUID(user.uid, user),
-    JobQueue.createForgotPasswordMail(user),
-  ]);
+  return {
+    user: updatedUser,
+    accessToken: token,
+  };
 };

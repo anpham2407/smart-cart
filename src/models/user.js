@@ -1,6 +1,5 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 const { Schema } = mongoose;
-import { UserRole } from "../core/enum";
 
 const userSchema = new Schema(
   {
@@ -11,6 +10,7 @@ const userSchema = new Schema(
     },
     username: {
       type: String,
+      unique: true,
       trim: true,
       default: null,
     },
@@ -51,30 +51,16 @@ const userSchema = new Schema(
       default: null,
     },
     links: {
-      type: ["Mixed"],
+      type: ['Mixed'],
     },
-    expiredResetPassword: {
-      type: Date,
-    },
-    resetToken: {
-      type: String,
-    },
-    role: {
-      type: String,
-      required: true,
-      default: UserRole.USER,
+    roles: {
+      type: [String],
+      default: ['user'],
     },
   },
   {
     timestamps: true,
   },
-  {
-    isBlock: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
-  }
 );
 
-export default mongoose.model("User", userSchema);
+export default mongoose.model('User', userSchema);

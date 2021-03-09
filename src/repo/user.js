@@ -1,6 +1,6 @@
-import User from "../models/user";
+import User from '../models/user';
 
-export const getById = async (id) => {
+export const getById = (id) => {
   return User.findById(id);
 };
 
@@ -20,9 +20,11 @@ export const getByUsername = async (username) => {
   const user = await User.findOne({
     username,
   });
+
   if (user) {
     return user.toObject();
   }
+
   return null;
 };
 
@@ -50,21 +52,37 @@ export const getByPhone = async (phone) => {
   return null;
 };
 
-export const getAll = async () => {
+export const getAll = () => {
   return User.find();
 };
 
-export const create = async (m) => {
-  console.log(m);
+export const create = (m) => {
   return User.create(m);
 };
 
-export const updateByUID = async (uid, updates) => {
+export const updateByUID = (uid, updates) => {
   return User.findOneAndUpdate(
     {
       uid,
     },
-    updates,
-    { new: true }
+    {
+      $set: {
+        ...updates,
+      },
+    },
+  );
+};
+
+export const updateById = (id, updates) => {
+  return User.findByIdAndUpdate(
+    id,
+    {
+      $set: {
+        ...updates,
+      },
+    },
+    {
+      new: true,
+    },
   );
 };
