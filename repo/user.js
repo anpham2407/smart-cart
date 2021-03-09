@@ -68,3 +68,17 @@ export const updateByUID = async (uid, updates) => {
     { new: true }
   );
 };
+
+export const updateById = (id, updates) => {
+  return User.findByIdAndUpdate(
+    id,
+    {
+      $set: {
+        ...updates,
+      },
+    },
+    {
+      new: true,
+    }
+  );
+};
