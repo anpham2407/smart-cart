@@ -36,7 +36,7 @@ mongoose
   });
 
 const app = express();
-app.use("/v1/static", express.static(process.env.STORAGE_PATH));
+app.use("/v1/static", express.static("/storage"));
 app.use(cors());
 app.use(logger("dev"));
 app.use(express.json());
