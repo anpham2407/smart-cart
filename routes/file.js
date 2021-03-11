@@ -6,7 +6,7 @@ const router = express.Router();
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join("../storage", "/avatars"));
+    cb(null, path.join(__dirname, "../storage", "/avatars"));
   },
   filename: (req, file, cb) => {
     const { originalname } = file;
@@ -15,7 +15,12 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 3 * 1024 * 1024,
+  },
+});
 
 /* POST new user */
 router.post("/avatars", upload.single("avatar"), async (req, res, next) => {
