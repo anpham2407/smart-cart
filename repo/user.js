@@ -55,16 +55,20 @@ export const getAll = async () => {
 };
 
 export const create = async (m) => {
-  console.log(m);
   return User.create(m);
 };
 
 export const updateByUID = async (uid, updates) => {
+  console.log(updates);
   return User.findOneAndUpdate(
     {
       uid,
     },
-    updates,
+    {
+      $set: {
+        ...updates,
+      },
+    },
     { new: true }
   );
 };
