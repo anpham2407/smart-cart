@@ -12,6 +12,7 @@ import usersRouter from "./routes/users";
 import authRouter from "./routes/auth";
 import filesRouter from "./routes/file";
 import JobQueue from "./job";
+import path from "path";
 
 const limiter = rateLimit({
   windowMs: 1000, // 1 minutes
@@ -36,7 +37,7 @@ mongoose
   });
 
 const app = express();
-app.use("/v1/static", express.static("/storage"));
+app.use("/v1/static", express.static(path.join(__dirname, "/storage")));
 app.use(cors());
 app.use(logger("dev"));
 app.use(express.json());
