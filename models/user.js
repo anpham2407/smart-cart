@@ -64,16 +64,15 @@ const userSchema = new Schema(
       required: true,
       default: UserRole.USER,
     },
-  },
-  {
-    timestamps: true,
-  },
-  {
     isBlock: {
       type: Boolean,
       required: true,
       default: false,
+      trim: true,
     },
+  },
+  {
+    timestamps: true,
   }
 );
 
