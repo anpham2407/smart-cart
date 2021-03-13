@@ -38,6 +38,11 @@ mongoose
 
 const app = express();
 app.use("/v1/static", express.static(path.join(__dirname, "/storage")));
+app.use(
+  "/.well-known",
+  express.static(path.join(__dirname, "/pki-validation"))
+);
+
 app.use(cors());
 app.use(logger("dev"));
 app.use(express.json());
