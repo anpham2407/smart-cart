@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 import vCard from "vcards-js";
 
-import { ErrUserNotExist } from "../core/error";
+import { ErrUserNotExist, ErrUserNotExist } from "../core/error";
 import * as UserService from "../services/user";
 
 /* GET users listing. */
@@ -44,13 +44,14 @@ router.post("/", async (req, res, next) => {
 router.put("/:uid/block", async (req, res, next) => {
   const { uid } = req.params;
   try {
-    const user = await UserService.updateByUID(uid, { isBlock: true });
+    const u = await UserService.getByUID(uid);
+    if (!u) throw ErrUserNotExist;
+    const user = await UserService.updateByUID(uid, { isBlock: !u.isBlock });
     res.json(user);
   } catch (error) {
     next(error);
   }
 });
-
 /* PUT update user profile */
 router.put("/:id", async (req, res, next) => {
   try {

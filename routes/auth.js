@@ -33,6 +33,12 @@ const ErrInvalidResetPasswordRequest = APIError({
   message: "invalid reset password request, missing email or wrong email",
 });
 
+const ErrUserIsBlockRequest = APIError({
+  status: 400,
+  code: "INVALID_USER_IS_BLOCK_REQUEST",
+  message: "invalid ruser got block",
+});
+
 router.post("/login", async (req, res, next) => {
   try {
     // validate login request payload
@@ -47,7 +53,7 @@ router.post("/login", async (req, res, next) => {
     };
 
     const authResp = await AuthService.userLogin(authReq);
-
+    if (authResp.isBlock) throw ErrUserIsBlockRequest;
     return res.json(authResp);
   } catch (error) {
     return next(error);
