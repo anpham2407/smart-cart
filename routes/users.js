@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 import vCard from "vcards-js";
 
-import { ErrUserNotExist, ErrUserNotExist } from "../core/error";
+import { ErrUserNotExist } from "../core/error";
 import * as UserService from "../services/user";
 
 /* GET users listing. */
