@@ -34,7 +34,7 @@ class JobQueue {
 
   async createForgotPasswordMail(user) {
     try {
-      const link = `http://khachhang.tapply.vn/reset-password?uid=${user.uid}&verifyToken=${user.resetToken}`;
+      const link = `http://app.tapply.vn/reset-password?uid=${user.uid}&verifyToken=${user.resetToken}`;
       await this.queue
         .create(ForgotPassword, {
           name: user.fullname,
